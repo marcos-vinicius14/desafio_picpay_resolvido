@@ -1,16 +1,14 @@
 package com.desafio.picpay.module.user.entity;
 
 import com.desafio.picpay.module.transfer.entity.TransferEntity;
-import com.desafio.picpay.module.transfer.model.TransferModel;
-import com.desafio.picpay.module.user.model.valueObjects.Identifier;
 import com.desafio.picpay.module.user.model.valueObjects.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.NotFound;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -41,7 +39,7 @@ public class UserEntity {
     private  String documentNumber;
 
     @Column(name = "balance", nullable = false)
-    private double balance;
+    private BigDecimal balance;
 
     @OneToMany(mappedBy = "payers")
     private List<TransferEntity> transfersSended;

@@ -2,6 +2,8 @@ package com.desafio.picpay.module.user.model;
 
 import com.desafio.picpay.module.user.model.valueObjects.*;
 
+import java.math.BigDecimal;
+
 public class UserModel  {
    private Long id;
    private String userName;
@@ -10,14 +12,16 @@ public class UserModel  {
    private UserType type;
    private String documentNumber;
    private Identifier identifier;
+   private BigDecimal balance;
 
-   public UserModel(Long id, Email email, Password password, String userName, UserType type, String documentNumber) {
+   public UserModel(Long id, Email email, Password password, String userName, UserType type, Identifier documentNumber, BigDecimal balance) {
       this.id = id;
       this.email = email;
       this.password = password;
       this.userName = userName;
       this.type = type;
       this.documentNumber = documentNumber;
+      this.balance = balance;
 
       this.identifier = IdentifierFactory.create(type, documentNumber);
 
@@ -56,6 +60,10 @@ public class UserModel  {
       return identifier;
    }
 
+   public BigDecimal getBalance() {
+      return balance;
+   }
+
    public void setId(Long id) {
       this.id = id;
    }
@@ -78,5 +86,9 @@ public class UserModel  {
 
    public void setIdentifier(Identifier identifier) {
       this.identifier = identifier;
+   }
+
+   public void setBalance(BigDecimal balance) {
+      this.balance = balance;
    }
 }
