@@ -3,8 +3,8 @@ package com.desafio.picpay.module.user.model.valueObjects;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class CNPJ {
-    private final String cnpj;
+public class CNPJ implements Identifier {
+    private final String number;
     private static final String CNPJ_REGEX = "^(\\d{2}\\.?\\d{3}\\.?\\d{3}/?\\d{4}-?\\d{2}|\\d{14})$";
     private static final Pattern CNPJ_PATTERN = Pattern.compile(CNPJ_REGEX);
 
@@ -12,25 +12,33 @@ public class CNPJ {
         Objects.requireNonNull(cnpj, "CNPJ should not be null");
         String numericCnpj = cnpj.replaceAll("[^\\d]", "");
         validate(numericCnpj);
-        this.cnpj = numericCnpj;
+        this.number = numericCnpj;
     }
 
-    private void validate(String cnpj) {
-        if (cnpj.isEmpty()) {
-            throw new IllegalArgumentException("CNPJ cannot be empty");
-        }
-        if (!CNPJ_PATTERN.matcher(cnpj).matches()) {
-            throw new IllegalArgumentException("Invalid CNPJ format");
-        }
-        if (cnpj.length() != 14) {
-            throw new IllegalArgumentException("CNPJ must have 14 digits");
-        }
-        if (isAllDigitsEqual(cnpj)) {
-            throw new IllegalArgumentException("CNPJ cannot have all digits equal");
-        }
-        if (!isValidVerificationDigits(cnpj)) {
-            throw new IllegalArgumentException("Invalid CNPJ verification digits");
-        }
+
+
+    @Override
+    public void validate(String number) {
+        Objects.requireNonNull(number, "CNPJ should not be null");
+
+        if (!CNPJ_PATTERN.matcher(number).matches()) throw new IllegalArgumentException("Invalid CNPJ format");
+
+        if (number.length() != 14) throw new IllegalArgumentException("CNPJ must have 14 digits");
+
+        if (isAllDigitsEqual(number)) throw new IllegalArgumentException("CNPJ cannot have all digits equal");
+
+        if (!isValidVerificationDigits(number)) throw new IllegalArgumentException("Invalid CNPJ verification digits");
+
+    }
+
+    @Override
+    public String getNumber() {
+        return number;
+    }
+
+    @Override
+    public String getFormatNumber() {
+        return number.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
     }
 
     private boolean isValidVerificationDigits(String cnpj) {
@@ -56,11 +64,4 @@ public class CNPJ {
         return cnpj.matches("(\\d)\\1{13}");
     }
 
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public String getFormattedCnpj() {
-        return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
-    }
 }

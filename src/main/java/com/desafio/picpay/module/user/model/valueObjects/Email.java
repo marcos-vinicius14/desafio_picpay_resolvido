@@ -1,10 +1,9 @@
 package com.desafio.picpay.module.user.model.valueObjects;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class Email {
+public class Email  {
     private final String email;
     private final static String EMAIL_REGEX =
             "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z]{2,})+$";

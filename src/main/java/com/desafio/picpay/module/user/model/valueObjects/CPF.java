@@ -6,8 +6,8 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @EqualsAndHashCode
-public class CPF {
-    private final String cpf;
+public class CPF implements Identifier {
+    private final String number;
     private final static String CPF_REGEX =
             "^(\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}|\\d{11})$";
 
@@ -17,31 +17,10 @@ public class CPF {
         Objects.requireNonNull(cpf);
         String numericCpf = cpf.replaceAll("[^\\d]", ""); // Limpa apenas uma vez
         validate(numericCpf);
-        this.cpf = numericCpf;
+        this.number = numericCpf;
     }
 
 
-
-    private void validate(String cpf) {
-        Objects.requireNonNull(cpf, "CPF should not be null");
-
-        if (cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF cannot be empty");
-        }
-        if (!CPF_PATTERN.matcher(cpf).matches()) {
-            throw new IllegalArgumentException("Invalid CPF format");
-        }
-        if (cpf.length() != 11) {
-            throw new IllegalArgumentException("CPF must have 11 digits");
-        }
-        if (isAllDigitsEqual(cpf)) {
-            throw new IllegalArgumentException("CPF cannot have all digits equal");
-        }
-        if (!isValidVerificationDigits(cpf)) {
-            throw new IllegalArgumentException("Invalid CPF verification digits");
-        }
-
-    }
 
 
     private boolean isValidVerificationDigits(String cpf) {
@@ -68,12 +47,36 @@ public class CPF {
         return cpf.matches("(\\d)\\1{10}");
     }
 
-    public String getCpf() {
-        return cpf;
+
+    @Override
+    public String getNumber() {
+        return number;
     }
 
-    public String getFormattedCpf() {
-        return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    @Override
+    public String getFormatNumber() {
+        return number.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
+
+    @Override
+    public void validate(String number) {
+        Objects.requireNonNull(number, "CPF should not be null");
+
+        if (number.isEmpty()) {
+            throw new IllegalArgumentException("CPF cannot be empty");
+        }
+        if (!CPF_PATTERN.matcher(number).matches()) {
+            throw new IllegalArgumentException("Invalid CPF format");
+        }
+        if (number.length() != 11) {
+            throw new IllegalArgumentException("CPF must have 11 digits");
+        }
+        if (isAllDigitsEqual(number)) {
+            throw new IllegalArgumentException("CPF cannot have all digits equal");
+        }
+        if (!isValidVerificationDigits(number)) {
+            throw new IllegalArgumentException("Invalid CPF verification digits");
+        }
     }
 }
 
