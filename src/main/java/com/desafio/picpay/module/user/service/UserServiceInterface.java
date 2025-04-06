@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface UserServiceInterface {
     UserResponseDTO createUser(UserCreateDTO createDTO);
-    UserResponseDTO updateUserOrThrowsResponseStatusException(UserUpdateDTO updateDTO);
+    UserResponseDTO updateUserOrUserNotFoundException(UserUpdateDTO updateDTO);
     void deleteUser(Long id);
-    Optional<UserResponseDTO> findUserByIdOrThrowsResponseStatusException(Long id);
-    Optional<UserResponseDTO> findUserByEmailOrThrowsResponseStatusException(String email);
-    Optional<UserResponseDTO> findUserByDocumentNumberOrThrowsResponseStatusException(String documentNumber);
+    Optional<UserResponseDTO> findUserByIdOrThrowsUserNotFoundException(Long id);
+    Optional<UserResponseDTO> findUserByEmailOrThrowsUserNotFoundException(String email);
+    Optional<UserResponseDTO> findUserByDocumentNumberOrThrowsUserNotFoundException(String documentNumber);
 }

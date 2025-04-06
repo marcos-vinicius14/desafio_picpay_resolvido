@@ -5,13 +5,12 @@ import com.desafio.picpay.module.user.dto.UserResponseDTO;
 import com.desafio.picpay.module.user.dto.UserUpdateDTO;
 import com.desafio.picpay.module.user.entity.UserEntity;
 import com.desafio.picpay.module.user.exception.EmailAlreadyExistsException;
+import com.desafio.picpay.module.user.exception.UserNotFoundException;
 import com.desafio.picpay.module.user.mapper.UserMapper;
 import com.desafio.picpay.module.user.model.UserModel;
 import com.desafio.picpay.module.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -37,9 +36,9 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public UserResponseDTO updateUserOrThrowsResponseStatusException(UserUpdateDTO updateDTO) {
+    public UserResponseDTO updateUserOrUserNotFoundException(UserUpdateDTO updateDTO) {
         UserEntity userToUpdate = userRepository.findUserEntityByEmail(updateDTO.email())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!userToUpdate.getEmail().equals(updateDTO.email())) {
             if (userRepository.existsUserEntityByEmail(updateDTO.email())) {
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserServiceInterface{
     @Override
     public void deleteUser(Long id) {
         if (id == null) {
-            throw new IllegalArgumentException("Id user not found or no exists");
+            throw new UserNotFoundException("User not found");
         }
 
         userRepository.deleteById(id);
@@ -67,9 +66,9 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByIdOrThrowsResponseStatusException(Long id) {
+    public Optional<UserResponseDTO> findUserByIdOrThrowsUserNotFoundException(Long id) {
         UserEntity entity = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() ->  new UserNotFoundException("User not found"));
 
         UserModel model = UserMapper.toDomainModel(entity);
         return Optional.of(UserMapper.toDTO(model));
@@ -77,9 +76,9 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByEmailOrThrowsResponseStatusException(String email) {
+    public Optional<UserResponseDTO> findUserByEmailOrThrowsUserNotFoundException(String email) {
         UserEntity entity = userRepository.findUserEntityByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         UserModel userModel = UserMapper.toDomainModel(entity);
         return Optional.of(UserMapper.toDTO(userModel));
@@ -87,9 +86,9 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByDocumentNumberOrThrowsResponseStatusException(String documentNumber) {
+    public Optional<UserResponseDTO> findUserByDocumentNumberOrThrowsUserNotFoundException(String documentNumber) {
         UserEntity userEntityByIdentifier = userRepository.findUserEntityByIdentifier(documentNumber)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         UserModel model = UserMapper.toDomainModel(userEntityByIdentifier);
         return Optional.of(UserMapper.toDTO(model));
