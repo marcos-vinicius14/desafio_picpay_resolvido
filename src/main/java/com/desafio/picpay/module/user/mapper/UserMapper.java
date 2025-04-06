@@ -1,12 +1,15 @@
 package com.desafio.picpay.module.user.mapper;
 
-import com.desafio.picpay.module.user.UserDTO;
+import com.desafio.picpay.module.user.dto.UserCreateDTO;
+import com.desafio.picpay.module.user.dto.UserResponseDTO;
 import com.desafio.picpay.module.user.entity.UserEntity;
 import com.desafio.picpay.module.user.model.UserModel;
 import com.desafio.picpay.module.user.model.valueObjects.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
+@Slf4j
 public class UserMapper {
 
     public static UserEntity toEntity(UserModel model) {
@@ -31,20 +34,19 @@ public class UserMapper {
                 ? new CPF(entity.getDocumentNumber())
                 : new CNPJ(entity.getDocumentNumber());
 
-        return new UserModel(
-                entity.getId(),
-                new Email(entity.getEmail()),
-                new Password(entity.getPassword()),
-                entity.getUserName(),
-                type,
-                identifier, // Usa o Identifier
-                entity.getBalance()
-        );
+        return new UserModel.Builder()
+                .email(new Email(entity.getEmail()))
+                .password(new Password(entity.getPassword()))
+                .identifier(entity.getDocumentNumber(), entity.getType())
+                .balance(entity.getBalance())
+                .type(entity.getType())
+                .userName(entity.getUserName())
+                .build();
     }
 
-    public static UserDTO toDTO(UserModel model) {
+    public static UserResponseDTO toDTO(UserModel model) {
         Objects.requireNonNull(model);
-        return new UserDTO(
+        return new UserResponseDTO(
                 model.getId(),
                 model.getUserName(),
                 model.getEmail().getEmail(),
@@ -53,4 +55,18 @@ public class UserMapper {
                 model.getBalance()
         );
     }
+
+    public static UserModel toCreateDtoToModel(UserCreateDTO dto) {
+        Objects.requireNonNull(dto, "DTO não pode ser nulo");
+
+        return new UserModel.Builder()
+                .userName(dto.userName())
+                .email(new Email(dto.email()))
+                .password(new Password(dto.password()))
+                .identifier(dto.documentNumber(), dto.userType())
+                .balance(dto.initialBalance())
+                .build();
+    }
+
+
 }
