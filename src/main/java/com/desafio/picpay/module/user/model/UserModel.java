@@ -14,6 +14,7 @@ public class UserModel {
    private final String documentNumber;
    private final Identifier identifier;
    private final BigDecimal balance;
+   //TODO: Adcionar transferencia
 
    private UserModel(Builder builder) {
       this.id = builder.id;

@@ -36,7 +36,8 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public UserResponseDTO updateUserOrUserNotFoundException(UserUpdateDTO updateDTO) {
+    @Transactional
+    public UserResponseDTO updateUser(UserUpdateDTO updateDTO) {
         UserEntity userToUpdate = userRepository.findUserEntityByEmail(updateDTO.email())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByIdOrThrowsUserNotFoundException(Long id) {
+    public Optional<UserResponseDTO> findUserById(Long id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() ->  new UserNotFoundException("User not found"));
 
@@ -76,7 +77,7 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByEmailOrThrowsUserNotFoundException(String email) {
+    public Optional<UserResponseDTO> findUserByEmail(String email) {
         UserEntity entity = userRepository.findUserEntityByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserServiceInterface{
     }
 
     @Override
-    public Optional<UserResponseDTO> findUserByDocumentNumberOrThrowsUserNotFoundException(String documentNumber) {
+    public Optional<UserResponseDTO> findUserByDocumentNumber(String documentNumber) {
         UserEntity userEntityByIdentifier = userRepository.findUserEntityByIdentifier(documentNumber)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
