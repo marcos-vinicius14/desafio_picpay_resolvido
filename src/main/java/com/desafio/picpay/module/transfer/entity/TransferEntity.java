@@ -31,9 +31,6 @@ public class TransferEntity {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id")
-    private UserEntity payer;
+    private UserEntity user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "payee_id")
-    private UserEntity payee;
 }

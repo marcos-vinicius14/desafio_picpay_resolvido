@@ -9,54 +9,40 @@ import java.util.Objects;
 public class TransferModel {
     private final Long id;
     private final BigDecimal value;
-    private final UserModel payer;
-    private final UserModel payee;
+    private final UserModel user;
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    private TransferModel(TransferBuilder builder) {
+    private TransferModel(Builder builder) {
         this.id = builder.id;
         this.value = builder.value;
-        this.payer = builder.payer;
-        this.payee = builder.payee;
+        this.user = builder.user;
     }
 
 
-    public static class TransferBuilder {
+    public static class Builder {
         private BigDecimal value;
         private LocalDateTime cretedAt;
-        private UserModel payer;
-        private UserModel payee;
+        private UserModel user;
         private Long id;
 
-        public  TransferBuilder (Long id, BigDecimal value, LocalDateTime cretedAt, UserModel payer, UserModel payee) {
-            this.value = value;
-            this.cretedAt = cretedAt;
-            this.payer = payer;
-            this.payee = payee;
-            this.id = id;
-        }
 
-        public TransferBuilder setValue (BigDecimal value) {
+        public Builder setValue (BigDecimal value) {
             this.value = value;
             return this;
         }
 
-        public TransferBuilder setCretedAt (LocalDateTime cretedAt) {
+        public Builder setCretedAt (LocalDateTime cretedAt) {
             this.cretedAt = cretedAt;
             return this;
         }
 
-        public TransferBuilder setPayer (UserModel payer) {
-            this.payer = payer;
+
+        public Builder setUser (UserModel payee) {
+            this.user = payee;
             return this;
         }
 
-        public TransferBuilder setPayee (UserModel payee) {
-            this.payee = payee;
-            return this;
-        }
-
-        public TransferBuilder setId (Long id) {
+        public Builder setId (Long id) {
             this.id = id;
             return this;
         }
@@ -64,8 +50,7 @@ public class TransferModel {
         public TransferModel build() {
             Objects.requireNonNull(value, "value is required");
             Objects.requireNonNull(cretedAt, "cretedAt is required");
-            Objects.requireNonNull(payer, "payer is required");
-            Objects.requireNonNull(payee, "payee is required");
+            Objects.requireNonNull(user, "payer is required");
             return new TransferModel(this);
         }
     }
@@ -78,12 +63,9 @@ public class TransferModel {
         return value;
     }
 
-    public UserModel getPayer() {
-        return payer;
-    }
 
-    public UserModel getPayee() {
-        return payee;
+    public UserModel getUser() {
+        return user;
     }
 
     public LocalDateTime getCreatedAt() {
