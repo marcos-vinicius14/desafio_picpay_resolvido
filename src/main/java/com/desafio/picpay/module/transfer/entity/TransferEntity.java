@@ -2,10 +2,7 @@ package com.desafio.picpay.module.transfer.entity;
 
 import com.desafio.picpay.module.user.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
@@ -15,8 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "tb_transfers")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
-@Setter
 public class TransferEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +29,12 @@ public class TransferEntity {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id")
     private UserEntity user;
+
+    @Column(name = "payee_id", unique = true, nullable = false)
+    private Long payeeId;
+
+    @Column(name = "payer_id", nullable = false, unique = true)
+    private Long payerId;
+
 
 }

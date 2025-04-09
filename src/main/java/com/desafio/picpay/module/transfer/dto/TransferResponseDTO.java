@@ -2,5 +2,5 @@ package com.desafio.picpay.module.transfer.dto;
 
 import java.math.BigDecimal;
 
-public record TransferResponseDTO(BigDecimal value, String payer, String payee) {
+public record TransferResponseDTO( Long payerId, Long payeeId, BigDecimal value) {
 }
