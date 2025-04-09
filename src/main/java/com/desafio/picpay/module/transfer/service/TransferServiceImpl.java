@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-import java.util.Optional;
 
 
 @Service
@@ -45,6 +43,7 @@ public class TransferServiceImpl implements TransferServiceInterface {
                 amount
         );
 
+        transferRepository.save(TransferMapper.toEntity(transfer));
 
 
         return transfer;
